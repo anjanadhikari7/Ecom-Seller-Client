@@ -13,3 +13,13 @@ export const createUser = (userObj) => {
     data: userObj,
   });
 };
+
+// Public verify user
+
+export const verifyUser = (verificationObject) => {
+  return axiosApiCall({
+    method: "patch",
+    url: `${USER_API_URL}/verify-email`,
+    data: verificationObject,
+  });
+};

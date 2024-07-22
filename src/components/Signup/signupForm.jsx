@@ -49,6 +49,7 @@ const SignupForm = () => {
     });
     dispatch(setIsLoading(false));
     if (result?.status === "error") {
+      dispatch(setIsLoading(false));
       return toast.error(result.message || "Cannot create user!");
     }
 
