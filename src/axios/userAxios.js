@@ -23,3 +23,22 @@ export const verifyUser = (verificationObject) => {
     data: verificationObject,
   });
 };
+
+// Public | Login user
+
+export const loginUser = (loginData) => {
+  return axiosApiCall({
+    method: "post",
+    url: `${USER_API_URL}/login`,
+    data: loginData,
+  });
+};
+
+// Get user | private
+export const getUser = () => {
+  return axiosApiCall({
+    method: "get",
+    url: USER_API_URL,
+    isPrivate: true,
+  });
+};
