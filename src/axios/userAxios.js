@@ -42,3 +42,39 @@ export const getUser = () => {
     isPrivate: true,
   });
 };
+
+// Get new access token using refresh token
+
+export const getNewAccessJwt = () => {
+  return axiosApiCall({
+    method: "get",
+    url: `${USER_API_URL}/accessjwt`,
+    isPrivate: true,
+    useRefreshToken: true,
+  });
+};
+
+//LOGOUT USER
+export const logoutUser = (email) => {
+  return axiosApiCall({
+    method: "post",
+    url: `${USER_API_URL}/logout`,
+    data: { email },
+    isPrivate: true,
+  });
+};
+
+export const requestOTP = (email) => {
+  return axiosApiCall({
+    method: "post",
+    url: `${USER_API_URL}/verify-email`,
+    data: email,
+  });
+};
+export const verifyOTP = (otp) => {
+  return axiosApiCall({
+    method: "post",
+    url: `${USER_API_URL}/verify-otp`,
+    data: otp,
+  });
+};

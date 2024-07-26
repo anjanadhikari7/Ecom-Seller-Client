@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getNewAccessJwt } from "./userAxios";
 
 export const axiosApiCall = async (axiosParams) => {
   const {
@@ -33,15 +34,15 @@ export const axiosApiCall = async (axiosParams) => {
     // handle error
     // If access token is expired, try to get new access token using the refresh token
     // and use that new access token to call api
-    // if (error.message === "jwt expired") {
-    //   const result = await getNewAccessJwt();
+    if (error.message === "jwt expired") {
+      const result = await getNewAccessJwt();
 
-    //   if (result?.status === "success") {
-    //     sessionStorage.setItem("accessJWT", result.data);
+      if (result?.status === "success") {
+        sessionStorage.setItem("accessJWT", result.data);
 
-    //     return axiosApiCall(axiosParams);
-    //   }
-    // }
+        return axiosApiCall(axiosParams);
+      }
+    }
 
     return {
       status: "error",

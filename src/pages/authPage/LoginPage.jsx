@@ -1,5 +1,6 @@
 import { Badge, Col, Container, Image, Row, Stack } from "react-bootstrap";
 import adminAuthImage from "../../assets/adminAuthImage.svg";
+import LoginForm from "../../components/Login/LoginForm";
 const LoginPage = () => {
   return (
     <Container>
@@ -18,7 +19,7 @@ const LoginPage = () => {
         </Col>
 
         <Col className="d-flex justify-content-center align-items-center">
-          {/* <LoginForm /> */}
+          <LoginForm />
         </Col>
       </Row>
     </Container>

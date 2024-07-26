@@ -11,7 +11,6 @@ import { autoLoginAction, getUserAction } from "../../redux/user/userActions";
 import { useEffect } from "react";
 
 const initialFormData = {
-  email: "",
   password: "",
 };
 
