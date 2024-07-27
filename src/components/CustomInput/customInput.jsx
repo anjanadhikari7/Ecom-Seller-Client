@@ -1,7 +1,6 @@
 import { Form } from "react-bootstrap";
 
 const CustomInput = (props) => {
-  // eslint-disable-next-line react/prop-types
   const { label, inputAttributes, handleOnChange, options = [] } = props;
 
   if (inputAttributes.type === "select") {
