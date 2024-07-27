@@ -4,6 +4,7 @@ import {
   getUser,
   logoutUser,
   requestOTP,
+  resetPassword,
   verifyOTP,
 } from "../../axios/userAxios";
 import { setUser } from "./userSlice";
@@ -61,9 +62,10 @@ export const logoutUserAction = (email) => async (dispatch) => {
 
 export const otpAction = (email) => async (dispatch) => {
   const result = await requestOTP(email);
-
+  console.log(result.status);
   if (result?.status === "success") {
-    return toast.success(result.data);
+    console.log("successss");
+    return toast.success(result.message);
   }
   return toast.error(result.message);
 };
@@ -72,6 +74,8 @@ export const verifyUserAction = (otp) => async (dispatch) => {
   const result = await verifyOTP(otp);
 
   if (result?.status === "success") {
+    dispatch(setUser(result.data));
+    console.log(result.data);
     return toast.success(result.message);
   }
   return toast.error(result.message);

@@ -3,15 +3,21 @@ import CustomInput from "../CustomInput/customInput";
 import useForm from "../../hooks/useForm";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyUserAction } from "../../redux/user/userActions";
+import { useNavigate } from "react-router-dom";
 const initialFormData = {
   otp: "",
 };
 
-const OTPForm = () => {
+const OTPForm = (props) => {
+  const { setIsOtpVerified } = props;
   const dispatch = useDispatch();
   const handleOnVerify = (e) => {
     e.preventDefault();
-    dispatch(verifyUserAction(formData));
+    const result = dispatch(verifyUserAction(formData));
+
+    if (result) {
+      setIsOtpVerified(true);
+    }
   };
   const { formData, handleOnChange } = useForm(initialFormData);
   const { isLoading } = useSelector((state) => state.user);

@@ -31,6 +31,7 @@ function App() {
         >
           <Route path="categories" element={<CategoriesPage />} />
           <Route path="new-category" element={<NewCategoryPage />} />
+          <Route path="edit-category/:id" element={<NewCategoryPage />} />
         </Route>
       </Routes>
 

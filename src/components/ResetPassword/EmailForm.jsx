@@ -4,6 +4,9 @@ import useForm from "../../hooks/useForm";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsLoading } from "../../redux/user/userSlice";
 import { otpAction } from "../../redux/user/userActions";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const initialFormData = {
   email: "",
 };
@@ -17,14 +20,17 @@ const EmailForm = (props) => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    dispatch(setIsLoading(false));
+    dispatch(setIsLoading(true)); // Change to true when starting loading
     dispatch(otpAction(formData))
       .then(() => {
         dispatch(setIsLoading(false));
         setIsEmailSent(true);
       }) // Update state when email is sent
-      .catch((error) => console.error("Failed to send OTP", error)); // Handle any errors
+      .catch((error) => {
+        dispatch(setIsLoading(false));
+      }); // Handle any errors
   };
+
   return (
     <Col className="d-flex justify-content-center align-items-center">
       <Container className="p-4 border shadow-lg rounded-4">
@@ -55,6 +61,7 @@ const EmailForm = (props) => {
           </Button>
         </Form>
       </Container>
+      <ToastContainer />
     </Col>
   );
 };

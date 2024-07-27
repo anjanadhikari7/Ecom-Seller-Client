@@ -27,6 +27,7 @@ export const verifyUser = (verificationObject) => {
 // Public | Login user
 
 export const loginUser = (loginData) => {
+  console.log(loginData);
   return axiosApiCall({
     method: "post",
     url: `${USER_API_URL}/login`,
@@ -76,5 +77,12 @@ export const verifyOTP = (otp) => {
     method: "post",
     url: `${USER_API_URL}/verify-otp`,
     data: otp,
+  });
+};
+export const resetPassword = (email, password) => {
+  return axiosApiCall({
+    method: "post",
+    url: `${USER_API_URL}/reset-password`,
+    data: { email, password },
   });
 };

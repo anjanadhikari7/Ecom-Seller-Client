@@ -10,7 +10,6 @@ import {
   Stack,
 } from "react-bootstrap";
 import forgotImage from "../../assets/forgotImage.png";
-
 import { useState } from "react";
 
 import OTPForm from "../../components/ResetPassword/OTPForm";
@@ -18,6 +17,7 @@ import EmailForm from "../../components/ResetPassword/EmailForm";
 
 const ResetEmailPage = () => {
   const [isEmailSent, setIsEmailSent] = useState(false);
+  const [isOtpVerified, setIsOtpVerified] = useState(false);
 
   return (
     <Container>
@@ -35,11 +35,15 @@ const ResetEmailPage = () => {
             </pre>
           </Stack>
         </Col>
-        {isEmailSent ? (
-          <OTPForm />
-        ) : (
-          <EmailForm setIsEmailSent={setIsEmailSent} />
-        )}
+        <Col className="d-flex justify-content-center align-items-center">
+          {isOtpVerified ? (
+            <ResetPasswordForm />
+          ) : isEmailSent ? (
+            <OTPForm setIsOtpVerified={setIsOtpVerified} />
+          ) : (
+            <EmailForm setIsEmailSent={setIsEmailSent} />
+          )}
+        </Col>
       </Row>
     </Container>
   );
