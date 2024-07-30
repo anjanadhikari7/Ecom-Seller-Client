@@ -9,6 +9,7 @@ import AdminPrivateRoutes from "./components/PrivateAdminRoute/PrivateAdminRoute
 import CategoriesPage from "./pages/category/CategoriesPage";
 import NewCategoryPage from "./pages/category/NewCategoryPage";
 import ResetEmailPage from "./pages/authPage/ResetEmailPage";
+import EditCategoryPage from "./pages/category/EditCategoryPage";
 
 function App() {
   return (
@@ -31,7 +32,7 @@ function App() {
         >
           <Route path="categories" element={<CategoriesPage />} />
           <Route path="new-category" element={<NewCategoryPage />} />
-          <Route path="edit-category/:id" element={<NewCategoryPage />} />
+          <Route path="edit-category/:id" element={<EditCategoryPage />} />
         </Route>
       </Routes>
 

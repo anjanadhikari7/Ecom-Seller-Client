@@ -17,7 +17,7 @@ const formValidation = (formData) => {
 
   return password === confirmPassword;
 };
-const LoginForm = () => {
+const ResetPasswordForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { formData, handleOnChange } = useForm(initialFormData);
@@ -79,4 +79,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default ResetPasswordForm;

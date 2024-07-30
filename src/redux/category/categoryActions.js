@@ -1,5 +1,9 @@
 import { toast } from "react-toastify";
-import { createCategory, getCategories } from "../../axios/categoryAxios";
+import {
+  createCategory,
+  getCategories,
+  updateCategory,
+} from "../../axios/categoryAxios";
 import { setCategories } from "./categorySlice";
 import { setIsLoading } from "../user/userSlice";
 
@@ -21,6 +25,22 @@ export const createCategoryAction = (categoryObj) => async (dispatch) => {
   // call create category API
   const result = await createCategory(categoryObj);
   // set isCreating false
+  dispatch(setIsLoading(false));
+
+  if (result?.status === "error") {
+    return toast.error(result.message);
+  }
+
+  toast.success(result.message);
+  dispatch(getCategoriesAction());
+};
+
+// UPDATE A CATEGORY
+export const updateCategoryAction = (categoryObj) => async (dispatch) => {
+  dispatch(setIsLoading(true));
+
+  const result = await updateCategory(categoryObj);
+
   dispatch(setIsLoading(false));
 
   if (result?.status === "error") {

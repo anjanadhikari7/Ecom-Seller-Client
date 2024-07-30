@@ -24,3 +24,13 @@ export const createCategory = (categoryObj) => {
     isPrivate: true,
   });
 };
+
+// Update a category
+export const updateCategory = (categoryObj) => {
+  return axiosApiCall({
+    method: "patch",
+    url: CATEGORY_API_URL,
+    data: categoryObj,
+    isPrivate: true,
+  });
+};

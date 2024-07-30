@@ -2,9 +2,20 @@ import { useDispatch, useSelector } from "react-redux";
 import useForm from "../../hooks/useForm";
 import { Link, useNavigate } from "react-router-dom";
 import { categoryFormFields } from "./categoryFormFields";
-import { Button, Col, Container, Form, Row, Stack } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Container,
+  Form,
+  Row,
+  Spinner,
+  Stack,
+} from "react-bootstrap";
 import CustomInput from "../CustomInput/customInput";
-import { createCategoryAction } from "../../redux/category/categoryActions";
+import {
+  createCategoryAction,
+  updateCategoryAction,
+} from "../../redux/category/categoryActions";
 
 const CategoryForm = (props) => {
   const { initialFormData } = props;
@@ -26,8 +37,10 @@ const CategoryForm = (props) => {
       formObject.append(key, value)
     );
     // // Call Actions
-    dispatch(createCategoryAction(formObject));
-    // formData?._id ? dispatch(updateCategoryAction(formDt)) : dispatch(createCategoryAction(formDt))
+    //dispatch(createCategoryAction(formObject));
+    formData?._id
+      ? dispatch(updateCategoryAction(formObject))
+      : dispatch(createCategoryAction(formObject));
     navigate("/admin/categories");
   };
   const buttonText = formData?._id ? "Update" : "Create";

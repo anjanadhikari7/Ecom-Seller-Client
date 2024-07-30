@@ -14,6 +14,7 @@ import { useState } from "react";
 
 import OTPForm from "../../components/ResetPassword/OTPForm";
 import EmailForm from "../../components/ResetPassword/EmailForm";
+import ResetPasswordForm from "../../components/ResetPassword/ResetPasswordForm";
 
 const ResetEmailPage = () => {
   const [isEmailSent, setIsEmailSent] = useState(false);

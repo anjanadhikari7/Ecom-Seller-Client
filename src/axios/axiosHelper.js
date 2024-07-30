@@ -13,9 +13,11 @@ export const axiosApiCall = async (axiosParams) => {
   const token = useRefreshToken
     ? localStorage.getItem("refreshJWT")
     : sessionStorage.getItem("accessJWT");
+
   const headers = {
     Authorization: isPrivate ? token : null,
   };
+
   try {
     const response = await axios({
       method,
