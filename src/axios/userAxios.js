@@ -55,6 +55,16 @@ export const getNewAccessJwt = () => {
   });
 };
 
+// Get all user
+
+export const getAllUsers = () => {
+  return axiosApiCall({
+    method: "get",
+    url: `${USER_API_URL}/all`,
+    isPrivate: true,
+  });
+};
+
 //LOGOUT USER
 export const logoutUser = (email) => {
   return axiosApiCall({

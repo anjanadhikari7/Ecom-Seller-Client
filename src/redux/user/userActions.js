@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import {
+  getAllUsers,
   getNewAccessJwt,
   getUser,
   logoutUser,
@@ -7,7 +8,7 @@ import {
   resetPassword,
   verifyOTP,
 } from "../../axios/userAxios";
-import { setUser } from "./userSlice";
+import { setUser, setUsers } from "./userSlice";
 
 // GET USER ACTION
 export const getUserAction = () => async (dispatch) => {
@@ -20,6 +21,17 @@ export const getUserAction = () => async (dispatch) => {
   dispatch(setUser(result.data));
 };
 
+// GET USER ACTION
+export const getAllUserAction = () => async (dispatch) => {
+  const result = await getAllUsers();
+
+  if (result?.status === "error") {
+    return toast.error(result.message);
+  }
+  console.log("users", result);
+
+  dispatch(setUsers(result.data));
+};
 // AUTo LOgin
 
 export const autoLoginAction = () => async (dispatch) => {

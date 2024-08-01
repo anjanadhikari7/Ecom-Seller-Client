@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Card, Col, Container, Row, Stack } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
@@ -14,19 +14,23 @@ import {
 
 import { logoutUserAction } from "../../redux/user/userActions";
 import SidebarItem from "../SideBarItem/sideBarItem";
+import { setCategories } from "../../redux/category/categorySlice";
 
 const AdminLayout = () => {
   const [activeItem, setActiveItem] = useState("Dashboard");
+  const { categories } = useSelector((state) => state.category);
 
   const { user } = useSelector((state) => state.user);
   const { firstName, lastName, email } = user || {};
-  console.log(user);
 
   const dispatch = useDispatch();
   // LOGOUT FEATURE
   const handleLogout = () => {
     dispatch(logoutUserAction(email));
   };
+  useEffect(() => {
+    setCategories(categories);
+  }, []);
 
   return (
     <Container fluid>

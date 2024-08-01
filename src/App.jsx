@@ -10,6 +10,11 @@ import CategoriesPage from "./pages/category/CategoriesPage";
 import NewCategoryPage from "./pages/category/NewCategoryPage";
 import ResetEmailPage from "./pages/authPage/ResetEmailPage";
 import EditCategoryPage from "./pages/category/EditCategoryPage";
+import ProductPage from "./pages/product/ProductsPage";
+import NewProductPage from "./pages/product/NewProductPage";
+import EditProductPage from "./pages/product/EditProductPage";
+import ManageProductImages from "./pages/product/ManageProductImages";
+import UserPage from "./pages/user/userPage";
 
 function App() {
   return (
@@ -33,6 +38,14 @@ function App() {
           <Route path="categories" element={<CategoriesPage />} />
           <Route path="new-category" element={<NewCategoryPage />} />
           <Route path="edit-category/:id" element={<EditCategoryPage />} />
+          <Route path="products" element={<ProductPage />} />
+          <Route path="new-product" element={<NewProductPage />} />
+          <Route path="edit-product/:id" element={<EditProductPage />} />
+          <Route
+            path="manage-product-images/:id"
+            element={<ManageProductImages />}
+          />
+          <Route path="users" element={<UserPage />} />
         </Route>
       </Routes>
 
