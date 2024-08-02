@@ -1,6 +1,6 @@
 import { axiosApiCall } from "./axiosHelper";
 
-// USER API URL
+// Category API URL
 const CATEGORY_API_URL = `${
   import.meta.env.VITE_APP_API_BASE_URL
 }/api/category`;
@@ -29,6 +29,16 @@ export const createCategory = (categoryObj) => {
 export const updateCategory = (categoryObj) => {
   return axiosApiCall({
     method: "patch",
+    url: CATEGORY_API_URL,
+    data: categoryObj,
+    isPrivate: true,
+  });
+};
+
+// Delete a category
+export const deleteCategory = (categoryObj) => {
+  return axiosApiCall({
+    method: "delete",
     url: CATEGORY_API_URL,
     data: categoryObj,
     isPrivate: true,

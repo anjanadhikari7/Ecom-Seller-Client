@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 import {
   createCategory,
+  deleteCategory,
   getCategories,
   updateCategory,
 } from "../../axios/categoryAxios";
@@ -40,6 +41,23 @@ export const updateCategoryAction = (categoryObj) => async (dispatch) => {
   dispatch(setIsLoading(true));
 
   const result = await updateCategory(categoryObj);
+
+  dispatch(setIsLoading(false));
+
+  if (result?.status === "error") {
+    return toast.error(result.message);
+  }
+
+  toast.success(result.message);
+  dispatch(getCategoriesAction());
+};
+
+// Delete a cateegory
+
+export const deleteCategoryAction = (categoryObj) => async (dispatch) => {
+  dispatch(setIsLoading(true));
+
+  const result = await deleteCategory(categoryObj);
 
   dispatch(setIsLoading(false));
 

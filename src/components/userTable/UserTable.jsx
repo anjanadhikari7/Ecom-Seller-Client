@@ -1,6 +1,6 @@
 import { Button, Stack, Table } from "react-bootstrap";
-import { FaTrash } from "react-icons/fa";
-import { MdEdit } from "react-icons/md";
+import { BsPencil, BsTrash } from "react-icons/bs";
+
 import { Link } from "react-router-dom";
 
 const UserTable = (props) => {
@@ -34,14 +34,14 @@ const UserTable = (props) => {
               <td>{user.role}</td>
               <td>
                 <Stack direction="horizontal" gap={2}>
-                  <Button variant="outline-success">
-                    <MdEdit />
-                  </Button>
-                  <Link to={`/admin/manage-product-images/`}>
-                    <Button variant="outline-danger">
-                      <FaTrash />
+                  <Link to={`/admin/edit-user/${user._id}`}>
+                    <Button variant="outline-success">
+                      <BsPencil />
                     </Button>
                   </Link>
+                  <Button variant="outline-danger">
+                    <BsTrash />
+                  </Button>
                 </Stack>
               </td>
             </tr>

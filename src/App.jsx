@@ -46,6 +46,7 @@ function App() {
             element={<ManageProductImages />}
           />
           <Route path="users" element={<UserPage />} />
+          <Route path="edit-user/:id" element={<EditProductPage />} />
         </Route>
       </Routes>
 
