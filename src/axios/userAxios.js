@@ -27,7 +27,6 @@ export const verifyUser = (verificationObject) => {
 // Public | Login user
 
 export const loginUser = (loginData) => {
-  console.log(loginData);
   return axiosApiCall({
     method: "post",
     url: `${USER_API_URL}/login`,

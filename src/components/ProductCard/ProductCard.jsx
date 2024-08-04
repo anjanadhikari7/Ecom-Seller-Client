@@ -1,13 +1,19 @@
 /* eslint-disable react/prop-types */
 import { Badge, Button, Card, Image, Stack } from "react-bootstrap";
 import { BsImages, BsPencil, BsTrash } from "react-icons/bs";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { deleteProductAction } from "../../redux/product/productActions";
 
 const ProductCard = (props) => {
+  const dispatch = useDispatch();
   const { product } = props;
 
   const deleteProduct = () => {
     // dispatch delete action
+    if (window.confirm(`Are you sure you want to delete ${product.name}?`)) {
+      dispatch(deleteProductAction(product));
+    }
   };
   const salesStartDate = new Date(product.salesStartDate).getTime();
   const salesEndDate = new Date(product.salesEndDate).getTime();

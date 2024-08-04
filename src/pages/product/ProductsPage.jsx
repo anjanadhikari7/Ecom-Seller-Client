@@ -26,7 +26,7 @@ const ProductPage = () => {
             </Stack>
           </Col>
 
-          <Col xs={4} className="text-end">
+          <Col xs={4}>
             <Link to="/admin/new-product">
               <Button variant="success" className="btn-md">
                 Create

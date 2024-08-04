@@ -12,13 +12,17 @@ import {
   BsTags,
 } from "react-icons/bs";
 
-import { logoutUserAction } from "../../redux/user/userActions";
+import {
+  getAllUserAction,
+  logoutUserAction,
+} from "../../redux/user/userActions";
 import SidebarItem from "../SideBarItem/sideBarItem";
-import { setCategories } from "../../redux/category/categorySlice";
+
+import { getProductsAction } from "../../redux/product/productActions";
+import { getCategoriesAction } from "../../redux/category/categoryActions";
 
 const AdminLayout = () => {
   const [activeItem, setActiveItem] = useState("Dashboard");
-  const { categories } = useSelector((state) => state.category);
 
   const { user } = useSelector((state) => state.user);
   const { firstName, lastName, email } = user || {};
@@ -29,7 +33,9 @@ const AdminLayout = () => {
     dispatch(logoutUserAction(email));
   };
   useEffect(() => {
-    setCategories(categories);
+    dispatch(getProductsAction());
+    dispatch(getAllUserAction());
+    dispatch(getCategoriesAction());
   }, []);
 
   return (

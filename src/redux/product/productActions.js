@@ -3,6 +3,7 @@ import { setIsLoading, setProduct, setProducts } from "./productSlice";
 import {
   createProduct,
   createProductImages,
+  deleteProduct,
   getProduct,
   getProducts,
   updateProduct,
@@ -83,6 +84,21 @@ export const createProductImagesAction =
     dispatch(getProductAction(id));
     dispatch(getProductsAction());
   };
+
+export const deleteProductAction = (productObj) => async (dispatch) => {
+  dispatch(setIsLoading(true));
+
+  const result = await deleteProduct(productObj);
+
+  dispatch(setIsLoading(false));
+
+  if (result?.status === "error") {
+    return toast.error(result.message);
+  }
+
+  toast.success(result.message);
+  dispatch(getProductsAction());
+};
 
 // export const deleteProductImageAction = (_id, image) => async(dispatch) => {
 //   // call create category API

@@ -49,6 +49,16 @@ export const createProductImages = (productObj) => {
     isPrivate: true,
   });
 };
+// Delete Product
+
+export const deleteProduct = (productObj) => {
+  return axiosApiCall({
+    method: "delete",
+    url: PRODUCT_API_URL,
+    data: productObj,
+    isPrivate: true,
+  });
+};
 
 // // DELETE A PRODUCT
 // export const deleteProductImage = (_id, image) => {
