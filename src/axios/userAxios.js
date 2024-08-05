@@ -74,6 +74,7 @@ export const logoutUser = (email) => {
   });
 };
 
+// RequestOTP
 export const requestOTP = (email) => {
   return axiosApiCall({
     method: "post",
@@ -81,6 +82,8 @@ export const requestOTP = (email) => {
     data: email,
   });
 };
+
+// Verify OTP
 export const verifyOTP = (otp) => {
   return axiosApiCall({
     method: "post",
@@ -88,10 +91,22 @@ export const verifyOTP = (otp) => {
     data: otp,
   });
 };
+
+// Reset Password
 export const resetPassword = (email, password) => {
   return axiosApiCall({
     method: "post",
     url: `${USER_API_URL}/reset-password`,
     data: { email, password },
+  });
+};
+
+// Update User
+export const updateUser = (User) => {
+  return axiosApiCall({
+    method: "patch",
+    url: USER_API_URL,
+    data: User,
+    isPrivate: true,
   });
 };

@@ -6,9 +6,11 @@ import {
   logoutUser,
   requestOTP,
   resetPassword,
+  updateUser,
   verifyOTP,
 } from "../../axios/userAxios";
-import { setUser, setUsers } from "./userSlice";
+import { setIsLoading, setUser, setUsers } from "./userSlice";
+import { useNavigate } from "react-router-dom";
 
 // GET USER ACTION
 export const getUserAction = () => async (dispatch) => {
@@ -28,7 +30,6 @@ export const getAllUserAction = () => async (dispatch) => {
   if (result?.status === "error") {
     return toast.error(result.message);
   }
-  console.log("users", result);
 
   dispatch(setUsers(result.data));
 };
@@ -91,4 +92,24 @@ export const verifyUserAction = (otp) => async (dispatch) => {
     return toast.success(result.message);
   }
   return toast.error(result.message);
+};
+
+// Update User
+
+export const updateUserAction = (User) => async (dispatch, navigate) => {
+  //set isCreating true
+  dispatch(setIsLoading(true));
+  // call create category API
+  const result = await updateUser(User);
+  // set isCreating false
+  dispatch(setIsLoading(false));
+
+  if (result?.status === "error") {
+    return toast.error(result.message);
+  }
+
+  toast.success(result.message);
+
+  dispatch(getAllUserAction());
+  return { success: true };
 };

@@ -50,6 +50,7 @@ export const updateCategoryAction = (categoryObj) => async (dispatch) => {
 
   toast.success(result.message);
   dispatch(getCategoriesAction());
+  return { success: true };
 };
 
 // Delete a cateegory

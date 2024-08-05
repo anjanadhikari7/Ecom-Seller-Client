@@ -48,7 +48,7 @@ export const createProductAction = (productObj) => async (dispatch) => {
   dispatch(getProductsAction());
 };
 
-// UPDATE A CATEGORY
+// UPDATE A PRODUCT
 export const updateProductAction = (productObj) => async (dispatch) => {
   //set isCreating true
   dispatch(setIsLoading(true));

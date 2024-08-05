@@ -16,6 +16,7 @@ import EditProductPage from "./pages/product/EditProductPage";
 import ManageProductImages from "./pages/product/ManageProductImages";
 import UserPage from "./pages/user/userPage";
 import OrdersPage from "./pages/order/OrdersPage";
+import EditUser from "./pages/user/EditUser";
 
 function App() {
   return (
@@ -47,7 +48,7 @@ function App() {
             element={<ManageProductImages />}
           />
           <Route path="users" element={<UserPage />} />
-          <Route path="edit-user/:id" element={<EditProductPage />} />
+          <Route path="edit-user/:id" element={<EditUser />} />
           <Route path="orders" element={<OrdersPage />} />
           <Route path="new-order" element={"<NewOrderPage />"} />
           <Route path="edit-order/:id" element={"<EditOrderPage />"} />

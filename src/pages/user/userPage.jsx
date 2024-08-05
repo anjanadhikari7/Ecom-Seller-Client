@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row, Stack } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -8,33 +8,51 @@ import UserTable from "../../components/userTable/UserTable";
 const UserPage = () => {
   const { users } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const [searchTerm, setSearchTerm] = useState("");
+
   useEffect(() => {
-    // dispatch action to get all users
     dispatch(getAllUserAction());
   }, [dispatch]);
 
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const filteredUsers = users.filter((user) =>
+    `${user.firstName} ${user.lastName}`
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <>
-      <Container>
-        <Row>
-          <Col xs={8}>
-            <Stack gap={4}>
-              <Form.Control type="text" placeholder="Search by Name...." />
+    <Container>
+      <Row className="mb-4">
+        <Col xs={8}>
+          <Stack direction="horizontal" gap={2}>
+            <Form.Control
+              type="text"
+              placeholder="Search by Name..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+          </Stack>
+        </Col>
 
-              <UserTable users={users} />
-            </Stack>
-          </Col>
+        <Col xs={4}>
+          <Link to="/admin/new-user">
+            <Button variant="success" className="btn-md">
+              Add New User
+            </Button>
+          </Link>
+        </Col>
+      </Row>
 
-          <Col xs={4}>
-            <Link to="/admin/new-user">
-              <Button variant="success" className="btn-md">
-                Search
-              </Button>
-            </Link>
-          </Col>
-        </Row>
-      </Container>
-    </>
+      <Row>
+        <Col>
+          <UserTable users={filteredUsers} />
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
