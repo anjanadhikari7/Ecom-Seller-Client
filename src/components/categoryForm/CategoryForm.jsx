@@ -41,6 +41,7 @@ const CategoryForm = (props) => {
     formData?._id
       ? dispatch(updateCategoryAction(formObject))
       : dispatch(createCategoryAction(formObject));
+
     navigate("/admin/categories");
   };
   const buttonText = formData?._id ? "Update" : "Create";

@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import {
+  deleteUser,
   getAllUsers,
   getNewAccessJwt,
   getUser,
@@ -96,10 +97,10 @@ export const verifyUserAction = (otp) => async (dispatch) => {
 
 // Update User
 
-export const updateUserAction = (User) => async (dispatch, navigate) => {
+export const updateUserAction = (User) => async (dispatch) => {
   //set isCreating true
   dispatch(setIsLoading(true));
-  // call create category API
+  // call updaet user API
   const result = await updateUser(User);
   // set isCreating false
   dispatch(setIsLoading(false));
@@ -112,4 +113,23 @@ export const updateUserAction = (User) => async (dispatch, navigate) => {
 
   dispatch(getAllUserAction());
   return { success: true };
+};
+
+// Delete user action
+
+export const deleteUserAction = (User) => async (dispatch) => {
+  //set isCreating true
+  dispatch(setIsLoading(true));
+  // call delete user API
+  const result = await deleteUser(User);
+  // set isCreating false
+  dispatch(setIsLoading(false));
+
+  if (result?.status === "error") {
+    return toast.error(result.message);
+  }
+
+  toast.success(result.message);
+
+  dispatch(getAllUserAction());
 };

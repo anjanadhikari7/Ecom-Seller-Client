@@ -1,10 +1,19 @@
-import { Button, Stack, Table } from "react-bootstrap";
+import { Button, Spinner, Stack, Table } from "react-bootstrap";
 import { BsPencil, BsTrash } from "react-icons/bs";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Link } from "react-router-dom";
+import { deleteUserAction } from "../../redux/user/userActions";
 
 const UserTable = (props) => {
   const { users } = props;
+  const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.user);
+  const handleOndelete = (user) => {
+    if (window.confirm(`Are you sure you want to delete ${user.firstName}?`)) {
+      dispatch(deleteUserAction(user));
+    }
+  };
   return (
     <>
       <Table striped bordered hover>
@@ -39,8 +48,15 @@ const UserTable = (props) => {
                       <BsPencil />
                     </Button>
                   </Link>
-                  <Button variant="outline-danger">
-                    <BsTrash />
+                  <Button
+                    variant="outline-danger"
+                    onClick={() => handleOndelete(user)}
+                  >
+                    {isLoading ? (
+                      <Spinner animation="border" variant="primary" />
+                    ) : (
+                      <BsTrash />
+                    )}
                   </Button>
                 </Stack>
               </td>

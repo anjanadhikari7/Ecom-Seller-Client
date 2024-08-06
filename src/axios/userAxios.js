@@ -110,3 +110,13 @@ export const updateUser = (User) => {
     isPrivate: true,
   });
 };
+
+// Delete User
+export const deleteUser = (UserObj) => {
+  return axiosApiCall({
+    method: "delete",
+    url: USER_API_URL,
+    data: UserObj,
+    isPrivate: true,
+  });
+};
