@@ -20,6 +20,7 @@ import SidebarItem from "../SideBarItem/sideBarItem";
 
 import { getProductsAction } from "../../redux/product/productActions";
 import { getCategoriesAction } from "../../redux/category/categoryActions";
+import { getOrdersAction } from "../../redux/order/orderAction";
 
 const AdminLayout = () => {
   const [activeItem, setActiveItem] = useState("Dashboard");
@@ -36,6 +37,7 @@ const AdminLayout = () => {
     dispatch(getProductsAction());
     dispatch(getAllUserAction());
     dispatch(getCategoriesAction());
+    dispatch(getOrdersAction());
   }, []);
 
   return (
