@@ -17,6 +17,7 @@ import ManageProductImages from "./pages/product/ManageProductImages";
 import UserPage from "./pages/user/userPage";
 import OrdersPage from "./pages/order/OrdersPage";
 import EditUser from "./pages/user/EditUser";
+import Dashboard from "./pages/dashboard/dashboardPage";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
             </AdminPrivateRoutes>
           }
         >
+          <Route path="" element={<Dashboard />} />
           <Route path="categories" element={<CategoriesPage />} />
           <Route path="new-category" element={<NewCategoryPage />} />
           <Route path="edit-category/:id" element={<EditCategoryPage />} />
