@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navbar, Nav, Container, Row, Col, Card, Stack } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 
 import {
   FaTachometerAlt,
@@ -36,6 +36,17 @@ const AdminLayout = () => {
   const { firstName, lastName, email } = user || {};
 
   const dispatch = useDispatch();
+  const location = useLocation(); // Hook to get the current location
+
+  // Update activeItem based on current route
+  useEffect(() => {
+    const path = location.pathname;
+    if (path.includes("/admin/orders")) setActiveItem("Order");
+    else if (path.includes("/admin/products")) setActiveItem("Product");
+    else if (path.includes("/admin/categories")) setActiveItem("Category");
+    else if (path.includes("/admin/users")) setActiveItem("User");
+    else setActiveItem("Dashboard");
+  }, [location]);
 
   const handleLogout = () => {
     dispatch(logoutUserAction(email));
@@ -49,7 +60,7 @@ const AdminLayout = () => {
   }, [dispatch]);
 
   return (
-    <Container fluid className="p-0">
+    <Container fluid className="p-0 d-flex flex-column min-vh-100">
       {/* Sticky Navbar */}
       <Navbar
         bg="dark"
@@ -72,11 +83,11 @@ const AdminLayout = () => {
         </Navbar.Collapse>
       </Navbar>
 
-      <Row className="flex-nowrap">
+      <Row className="flex-nowrap flex-grow-1">
         {/* Sidebar */}
         <Col
           xs={3}
-          className="vh-100 bg-light shadow-sm p-3 position-fixed"
+          className="bg-light shadow-sm p-3 position-fixed"
           style={{ zIndex: 1000 }}
         >
           <Stack className="h-100">
@@ -139,18 +150,15 @@ const AdminLayout = () => {
         </Col>
 
         {/* Main Content */}
-        <Col style={{ marginLeft: "25%" }}>
-          <div className="vh-100 vw-90 pt-4">
+        <Col style={{ marginLeft: "25%" }} className="flex-grow-1">
+          <div className="pt-4">
             <Outlet />
           </div>
         </Col>
       </Row>
 
       {/* Footer */}
-      <footer
-        className="bg-dark text-white text-center py-2 mt-auto"
-        style={{ zIndex: 1100, position: "relative" }}
-      >
+      <footer className="bg-dark text-white text-center py-2 mt-auto">
         <small>&copy; 2024 Anjan. All rights reserved.</small>
       </footer>
     </Container>
