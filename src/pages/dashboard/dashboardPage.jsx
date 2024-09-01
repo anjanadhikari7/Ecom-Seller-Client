@@ -10,7 +10,7 @@ import {
 } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import CountUp from "react-countup";
-import "./Dashboard.css"; // Import the CSS file
+import "./Dashboard.css";
 import { Link } from "react-router-dom";
 
 const Dashboard = () => {

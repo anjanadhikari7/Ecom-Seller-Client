@@ -46,7 +46,7 @@ const ProductCard = (props) => {
                   {" "}
                 </Badge>
               ) : (
-                <Badge bg="success" className="p-4">
+                <Badge bg="danger" className="p-4">
                   {" "}
                 </Badge>
               )}

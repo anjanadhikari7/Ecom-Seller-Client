@@ -14,7 +14,7 @@ const USER_FORM_FIELDS = [
 
 const ROLE_OPTIONS = [
   { value: "admin", label: "Admin" },
-  { value: "student", label: "Student" },
+  { value: "user", label: "User" },
 ];
 
 const EditUserForm = ({ initialFormData }) => {

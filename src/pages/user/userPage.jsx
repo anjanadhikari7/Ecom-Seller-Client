@@ -39,7 +39,7 @@ const UserPage = () => {
         </Col>
 
         <Col xs={4}>
-          <Link to="/admin/new-user">
+          <Link to="/signup">
             <Button variant="success" className="btn-md">
               Add New User
             </Button>

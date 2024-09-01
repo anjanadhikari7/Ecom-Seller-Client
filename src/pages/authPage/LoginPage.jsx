@@ -1,5 +1,5 @@
 import { Badge, Col, Container, Image, Row, Stack } from "react-bootstrap";
-import adminAuthImage from "../../assets/adminAuthImage.svg";
+import logo from "../../assets/logo.png";
 import LoginForm from "../../components/Login/LoginForm";
 const LoginPage = () => {
   return (
@@ -7,14 +7,13 @@ const LoginPage = () => {
       <Row className="vh-100">
         <Col className="d-flex">
           <Stack className="justify-content-center align-items-center">
-            <Image src={adminAuthImage} height={300} width={300} />
+            <Image src={logo} height={300} width={300} />
             <Stack direction="horizontal" className="justify-content-center">
-              <h3 className="mx-2">ECOM DEN</h3>
+              <h3 className="mx-2">Gadget Galaxy</h3>
               <Badge bg="info">ADMIN</Badge>
             </Stack>
-            <pre>
-              Empowering Your E-Commerce Empire: Manage, Analyze, and Thrive.
-            </pre>
+
+            <pre>Where innovation meets imagination</pre>
           </Stack>
         </Col>
 
