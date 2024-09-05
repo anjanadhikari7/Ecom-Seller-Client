@@ -20,12 +20,10 @@ const OrderTable = ({ orders, users, showActions = false }) => {
         <tr>
           <th>#</th>
           <th>Order ID</th>
-          <th>Product Name</th>
+          <th>Product Name(s)</th> {/* Adjust column title */}
           <th>User Name</th>
           <th>Address</th>
           <th>Date</th>
-          <th>Price</th>
-          <th>Quantity</th>
           <th>Total Price</th>
           <th>Status</th>
           {showActions && <th>Actions</th>}{" "}
@@ -37,16 +35,29 @@ const OrderTable = ({ orders, users, showActions = false }) => {
           <tr key={order.id}>
             <td>{index + 1}</td>
             <td>{order.orderId}</td>
-            <td>{order.productName}</td>
+
+            {/* Display multiple products with their names and quantities */}
+            <td>
+              {order.products.map((product, idx) => (
+                <div key={idx}>
+                  {product.productName} (Qty: {product.quantity})
+                </div>
+              ))}
+            </td>
+
+            {/* Display user name */}
             <td>
               {users.find((user) => user._id === order.userId)?.firstName}{" "}
               {users.find((user) => user._id === order.userId)?.lastName}
             </td>
+
             <td>{order.address}</td>
             <td>{new Date(order.date).toLocaleDateString()}</td>
-            <td>{order.price}</td>
-            <td>{order.quantity}</td>
-            <td>{order.totalPrice}</td>
+
+            {/* Display total price for the order */}
+            <td>$ {order.totalPrice}</td>
+
+            {/* Display order status with badge */}
             <td>
               <Badge
                 bg={
@@ -62,6 +73,8 @@ const OrderTable = ({ orders, users, showActions = false }) => {
                 {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
               </Badge>
             </td>
+
+            {/* Conditionally show action buttons */}
             {showActions && (
               <td>
                 {order.status === "pending" && (

@@ -7,11 +7,10 @@ const CreateOrderModal = ({ show, handleClose, handleSave }) => {
   const { categories } = useSelector((state) => state.category);
   const { users } = useSelector((state) => state.user);
   const { products } = useSelector((state) => state.product);
-  const { orders } = useSelector((state) => state.order); // Access orders from state
+  const { orders } = useSelector((state) => state.order);
 
-  const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+  const today = new Date().toISOString().split("T")[0];
 
-  // Find the next order ID based on existing orders
   const getNextOrderId = () => {
     const lastOrderId = orders.reduce((max, order) => {
       const currentId = parseInt(order.orderId.replace("ORD", ""), 10);
@@ -22,67 +21,102 @@ const CreateOrderModal = ({ show, handleClose, handleSave }) => {
 
   const [formData, setFormData] = useState({
     orderId: getNextOrderId(),
-    productName: "",
     userId: "",
     address: "",
     date: today,
-    price: "",
-    quantity: 1,
     status: "pending",
     categories: "",
+    products: [],
+    totalPrice: 0,
+  });
+
+  const [currentProduct, setCurrentProduct] = useState({
+    categoryId: "",
+    productId: "",
+    productName: "",
+    price: "",
+    quantity: 1,
   });
 
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [availableQuantity, setAvailableQuantity] = useState(0); // Track available quantity of selected product
+  const [availableQuantity, setAvailableQuantity] = useState(0);
 
   useEffect(() => {
-    // Filter products based on selected category
-    if (formData.categories) {
+    if (currentProduct.categoryId) {
       const filtered = products.filter(
-        (product) => product.parentCategory === formData.categories
+        (product) => product.parentCategory === currentProduct.categoryId
       );
       setFilteredProducts(filtered);
     } else {
       setFilteredProducts([]);
     }
-  }, [formData.categories, products]);
+  }, [currentProduct.categoryId, products]);
 
-  useEffect(() => {
-    // Set price and available quantity based on selected product
-    if (formData.productName) {
-      const selectedProduct = products.find(
-        (product) => product.name === formData.productName
-      );
+  const handleProductChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "categoryId") {
+      setCurrentProduct({
+        ...currentProduct,
+        categoryId: value,
+        productId: "",
+      });
+      setAvailableQuantity(0);
+    } else if (name === "productId") {
+      const selectedProduct = products.find((product) => product._id === value);
       if (selectedProduct) {
-        setFormData((prevState) => ({
-          ...prevState,
+        setCurrentProduct({
+          ...currentProduct,
+          productId: selectedProduct._id,
+          productName: selectedProduct.name,
           price: selectedProduct.price,
-        }));
-        setAvailableQuantity(selectedProduct.quantity); // Update available quantity
+          quantity: 1,
+        });
+        setAvailableQuantity(selectedProduct.quantity);
       }
+    } else if (name === "quantity") {
+      setCurrentProduct({
+        ...currentProduct,
+        quantity: Math.min(Number(value), availableQuantity),
+      });
     }
-  }, [formData.productName, products]);
+  };
 
-  useEffect(() => {
-    // Calculate total price
-    if (formData.price && formData.quantity) {
-      const totalPrice = formData.price * formData.quantity;
+  const handleAddProduct = () => {
+    if (currentProduct.productId && currentProduct.quantity > 0) {
       setFormData((prevState) => ({
         ...prevState,
-        totalPrice: totalPrice.toFixed(2), // Format to 2 decimal places
+        products: [...prevState.products, { ...currentProduct }],
       }));
+      setCurrentProduct({
+        categoryId: "",
+        productId: "",
+        productName: "",
+        price: "",
+        quantity: 1,
+      });
     }
-  }, [formData.price, formData.quantity]);
+  };
+
+  const removeProduct = (index) => {
+    const updatedProducts = formData.products.filter((_, i) => i !== index);
+    setFormData({ ...formData, products: updatedProducts });
+  };
+
+  useEffect(() => {
+    const totalPrice = formData.products.reduce(
+      (total, product) => total + product.price * product.quantity,
+      0
+    );
+    setFormData((prevState) => ({
+      ...prevState,
+      totalPrice: totalPrice.toFixed(2),
+    }));
+  }, [formData.products]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    if (name === "quantity") {
-      const numericValue = Math.min(Number(value), availableQuantity); // Limit to available quantity
-      setFormData({ ...formData, [name]: numericValue });
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = (e) => {
@@ -100,14 +134,20 @@ const CreateOrderModal = ({ show, handleClose, handleSave }) => {
   const resetForm = () => {
     setFormData({
       orderId: getNextOrderId(),
-      productName: "",
       userId: "",
       address: "",
       date: today,
-      price: "",
-      quantity: 1,
       status: "pending",
       categories: "",
+      products: [],
+      totalPrice: 0,
+    });
+    setCurrentProduct({
+      categoryId: "",
+      productId: "",
+      productName: "",
+      price: "",
+      quantity: 1,
     });
     setFilteredProducts([]);
   };
@@ -130,7 +170,7 @@ const CreateOrderModal = ({ show, handleClose, handleSave }) => {
                   placeholder: "Order ID will be auto-generated",
                   name: "orderId",
                   value: formData.orderId,
-                  readOnly: true, // Make Order ID read-only
+                  readOnly: true,
                 }}
                 handleOnChange={handleChange}
               />
@@ -147,55 +187,96 @@ const CreateOrderModal = ({ show, handleClose, handleSave }) => {
                 handleOnChange={handleChange}
                 options={users.map((user) => ({
                   value: user._id,
-                  label: `${user.firstName} ${user.lastName}`,
+                  label: `${user.firstName} ${user.lastName} (${user.email})`,
                 }))}
               />
             </Col>
           </Row>
-          <Row>
+
+          {formData.products.length > 0 && (
+            <h5 className="mt-4">Selected Products</h5>
+          )}
+          {formData.products.map((product, index) => (
+            <Row key={index} className="mt-2">
+              <Col md={6}>{product.productName}</Col>
+              <Col md={3}>Quantity: {product.quantity}</Col>
+              <Col md={3}>
+                <Button variant="danger" onClick={() => removeProduct(index)}>
+                  Remove
+                </Button>
+              </Col>
+            </Row>
+          ))}
+
+          <h5 className="mt-4">Add New Product</h5>
+          <Row className="mt-2">
             <Col md={6}>
               <CustomInput
-                label="Categories"
+                label="Category"
                 inputAttributes={{
                   type: "select",
-                  name: "categories",
-                  value: formData.categories,
+                  name: "categoryId",
+                  value: currentProduct.categoryId,
                   placeholder: "Select category",
                   disabled: !isUserSelected,
                 }}
-                handleOnChange={handleChange}
+                handleOnChange={handleProductChange}
                 options={categories.map((category) => ({
                   value: category.id,
                   label: category.title,
                 }))}
               />
             </Col>
+          </Row>
+          <Row className="mt-2">
             <Col md={6}>
               <CustomInput
-                label="Product Name"
+                label="Product"
                 inputAttributes={{
                   type: "select",
-                  name: "productName",
-                  value: formData.productName,
-                  placeholder:
-                    filteredProducts.length === 0
-                      ? "No products available"
-                      : "Select product",
+                  name: "productId",
+                  value: currentProduct.productId,
+                  placeholder: "Select product",
                   disabled: !isUserSelected || filteredProducts.length === 0,
                 }}
-                handleOnChange={handleChange}
+                handleOnChange={handleProductChange}
                 options={
                   filteredProducts.length > 0
-                    ? filteredProducts.map((product) => ({
-                        value: product.name,
-                        label: product.name,
+                    ? filteredProducts.map((p) => ({
+                        value: p._id,
+                        label: p.name,
                       }))
                     : [{ value: "", label: "No products available" }]
                 }
               />
             </Col>
+            <Col md={3}>
+              <CustomInput
+                label="Quantity"
+                inputAttributes={{
+                  type: "number",
+                  name: "quantity",
+                  value: currentProduct.quantity,
+                  min: 1,
+                  max: availableQuantity,
+                  placeholder: "Enter quantity",
+                  disabled: !currentProduct.productId,
+                }}
+                handleOnChange={handleProductChange}
+              />
+            </Col>
+            <Col md={3} className="d-flex align-items-end">
+              <Button
+                variant="secondary"
+                onClick={handleAddProduct}
+                disabled={!currentProduct.productId}
+              >
+                Add Product
+              </Button>
+            </Col>
           </Row>
-          <Row>
+
+          <Row className="mt-3">
             <Col md={6}>
               <CustomInput
                 label="Address"
@@ -205,54 +286,23 @@ const CreateOrderModal = ({ show, handleClose, handleSave }) => {
                   name: "address",
                   value: formData.address,
                   disabled: !isUserSelected,
+                  required: true,
                 }}
                 handleOnChange={handleChange}
               />
             </Col>
             <Col md={6}>
               <CustomInput
-                label="Date"
+                label="Total Price ($)"
                 inputAttributes={{
-                  type: "date",
-                  placeholder: "Enter date",
-                  name: "date",
-                  value: formData.date,
-                  disabled: true,
+                  type: "text",
+                  value: formData.totalPrice,
+                  readOnly: true,
                 }}
-                handleOnChange={handleChange}
               />
             </Col>
           </Row>
-          <Row>
-            <Col md={6}>
-              <CustomInput
-                label="Price ($)"
-                inputAttributes={{
-                  type: "number",
-                  placeholder: "Enter price",
-                  name: "price",
-                  value: formData.price,
-                  disabled: !isUserSelected,
-                }}
-                handleOnChange={handleChange}
-              />
-            </Col>
-            <Col md={6}>
-              <CustomInput
-                label="Quantity"
-                inputAttributes={{
-                  type: "number",
-                  placeholder: "Enter quantity",
-                  name: "quantity",
-                  value: formData.quantity,
-                  min: 1,
-                  max: availableQuantity, // Set max based on available quantity
-                  disabled: !isUserSelected,
-                }}
-                handleOnChange={handleChange}
-              />
-            </Col>
-          </Row>
+
           <Row className="mt-3 justify-content-end">
             <Col md="auto">
               <Button variant="primary" type="submit">
