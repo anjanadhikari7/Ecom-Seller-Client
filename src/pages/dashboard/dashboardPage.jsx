@@ -1,17 +1,42 @@
 import React from "react";
-import { Container, Row, Col, Card } from "react-bootstrap";
+import { Container, Row, Col, Card, Table } from "react-bootstrap";
+import { Line, Bar } from "react-chartjs-2";
 import {
   FaShoppingCart,
   FaDollarSign,
   FaUsers,
   FaBox,
-  FaTags,
-  FaCheckCircle,
+  FaPen,
+  FaTrash,
 } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import CountUp from "react-countup";
-import "./Dashboard.css";
 import { Link } from "react-router-dom";
+import "./Dashboard.css";
+
+// Chart.js config
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Filler,
+} from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Filler
+);
 
 const Dashboard = () => {
   const { users } = useSelector((state) => state.user);
@@ -19,10 +44,71 @@ const Dashboard = () => {
   const { categories } = useSelector((state) => state.category);
   const { products } = useSelector((state) => state.product);
 
-  // Calculate confirmed orders
-  const confirmedOrders = products.filter(
-    (product) => product.status === "confirmed"
-  ).length;
+  const chartColors = {
+    purple: "rgba(102, 16, 242, 0.8)",
+    purpleFill: "rgba(102, 16, 242, 0.2)",
+    green: "rgba(28, 200, 138, 0.8)",
+    greenFill: "rgba(28, 200, 138, 0.2)",
+  };
+
+  // Sales Over the Past 7 Days
+  const salesByDay = new Array(7).fill(0);
+  orders.forEach((order) => {
+    const day = new Date(order.date).getDay(); // Get the day (0 for Sunday, 6 for Saturday)
+    salesByDay[day] += order.totalPrice; // Add the totalPrice to the respective day
+  });
+
+  const salesData = {
+    labels: [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ],
+    datasets: [
+      {
+        label: "Sales ($)",
+        data: salesByDay, // Use calculated sales by day
+        fill: true,
+        backgroundColor: chartColors.purpleFill,
+        borderColor: chartColors.purple,
+        tension: 0.3,
+      },
+    ],
+  };
+
+  // Top Categories Sold
+  const categorySales = {};
+  categories.forEach((category) => {
+    categorySales[category.title] = 0; // Initialize count for each category
+  });
+
+  orders.forEach((order) => {
+    order.products.forEach((product) => {
+      const category = categories.find(
+        (cat) => cat.Title === product.parentCategory
+      );
+      if (category) {
+        categorySales[category.title] += product.quantity; // Add the quantity of the product to the respective category
+      }
+    });
+  });
+
+  const categoriesData = {
+    labels: Object.keys(categorySales),
+    datasets: [
+      {
+        label: "Top Categories Sold",
+        data: Object.values(categorySales),
+        backgroundColor: chartColors.green,
+        borderColor: chartColors.green,
+        borderWidth: 1,
+      },
+    ],
+  };
 
   return (
     <Container fluid>
@@ -53,7 +139,12 @@ const Dashboard = () => {
                   color="#1cc88a"
                 />
                 <Card.Title>
-                  <CountUp end={15000} duration={2} separator="," prefix="$" />{" "}
+                  <CountUp
+                    end={salesByDay.reduce((acc, curr) => acc + curr, 0)}
+                    duration={2}
+                    separator=","
+                    prefix="$"
+                  />{" "}
                   Sales
                 </Card.Title>
               </Card.Body>
@@ -85,34 +176,82 @@ const Dashboard = () => {
           </Card>
         </Col>
       </Row>
+
       <Row>
-        <Col md={3}>
+        <Col md={6}>
           <Card className="dashboard-card">
-            <Link className="dashboard-link" to="/admin/categories">
-              <Card.Body>
-                <FaTags size={50} className="dashboard-icon" color="#e74a3b" />
-                <Card.Title>
-                  <CountUp end={categories.length} duration={2} /> Categories
-                </Card.Title>
-              </Card.Body>
-            </Link>
+            <Card.Body>
+              <h6>Sales Over the Past 7 Days</h6>
+              <Line data={salesData} />
+            </Card.Body>
           </Card>
         </Col>
-        <Col md={3}>
+        <Col md={6}>
           <Card className="dashboard-card">
-            <Link className="dashboard-link" to="/admin/confirmed-orders">
-              <Card.Body>
-                <FaCheckCircle
-                  size={50}
-                  className="dashboard-icon"
-                  color="#28a745"
-                />
-                <Card.Title>
-                  <CountUp end={confirmedOrders} duration={2} /> Confirmed
-                  Orders
-                </Card.Title>
-              </Card.Body>
-            </Link>
+            <Card.Body>
+              <h6>Top Categories Sold</h6>
+              <Bar data={categoriesData} />
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+
+      <Row className="mt-4">
+        <Col>
+          <Card className="dashboard-card">
+            <Card.Header>Recent Orders</Card.Header>
+            <Card.Body>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Order Id</th>
+                    <th>Customer</th>
+                    <th>Products</th>
+                    <th>Amount</th>
+                    <th>Placed Date</th>
+                    <th>Delivery Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {orders.map((order, index) => (
+                    <tr key={order._id}>
+                      <td>{index + 1}</td>
+                      <td>{order.orderId}</td>
+                      <td>{order.userId}</td>
+                      <td>
+                        {order.products
+                          .map((p) => ` ${p.productName} (${p.quantity})`)
+                          .join(", ")}
+                      </td>
+                      <td>${order.totalPrice}</td>
+                      <td>{new Date(order.date).toLocaleDateString()}</td>
+                      <td>
+                        <span
+                          className={`badge ${
+                            order.status === "confirmed"
+                              ? "bg-primary"
+                              : order.status === "pending"
+                              ? "bg-info"
+                              : "bg-warning"
+                          }`}
+                        >
+                          {order.status}
+                        </span>
+                      </td>
+                      <td>
+                        <FaPen color="green" style={{ cursor: "pointer" }} />
+                        <FaTrash
+                          color="red"
+                          style={{ cursor: "pointer", marginLeft: 10 }}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </Card.Body>
           </Card>
         </Col>
       </Row>
