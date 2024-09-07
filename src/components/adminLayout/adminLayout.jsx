@@ -91,7 +91,8 @@ const AdminLayout = () => {
           style={{ zIndex: 1000 }}
         >
           <Stack className="h-100">
-            <Card className="text-center fw-bold">
+            {/* User Profile Card */}
+            <Card className="text-center fw-bold mb-4">
               <Card.Header>
                 <FaUsers size={80} />
               </Card.Header>
@@ -100,6 +101,7 @@ const AdminLayout = () => {
 
             {/* Menu Items */}
             <Stack className="my-4">
+              {/* SidebarItem component will render the menu items */}
               <SidebarItem
                 icon={<FaTachometerAlt style={iconStyles} />}
                 label="Dashboard"

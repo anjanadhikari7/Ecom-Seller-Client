@@ -81,18 +81,25 @@ const Dashboard = () => {
   };
 
   // Top Categories Sold
-  const categorySales = {};
-  categories.forEach((category) => {
-    categorySales[category.title] = 0; // Initialize count for each category
-  });
+  const categorySales = categories.reduce((acc, category) => {
+    acc[category.title] = 0; // Initialize count for each category
+    return acc;
+  }, {});
 
   orders.forEach((order) => {
-    order.products.forEach((product) => {
-      const category = categories.find(
-        (cat) => cat.Title === product.parentCategory
+    order.products.forEach((orderProduct) => {
+      // Find the product in the products collection by matching productId
+      const product = products.find(
+        (prod) => prod._id === orderProduct.productId
       );
-      if (category) {
-        categorySales[category.title] += product.quantity; // Add the quantity of the product to the respective category
+      if (product) {
+        // Find the category that matches the product's parentCategory
+        const category = categories.find(
+          (cat) => cat.title === product.parentCategory
+        );
+        if (category) {
+          categorySales[category.title] += orderProduct.quantity; // Add quantity to the category
+        }
       }
     });
   });
