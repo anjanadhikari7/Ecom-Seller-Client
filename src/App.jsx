@@ -18,6 +18,7 @@ import UserPage from "./pages/user/userPage";
 import OrdersPage from "./pages/order/OrdersPage";
 import EditUser from "./pages/user/EditUser";
 import Dashboard from "./pages/dashboard/dashboardPage";
+import UserAccountPage from "./pages/user/UserAccountPage";
 
 function App() {
   return (
@@ -52,7 +53,7 @@ function App() {
           <Route path="users" element={<UserPage />} />
           <Route path="edit-user/:id" element={<EditUser />} />
           <Route path="orders" element={<OrdersPage />} />
-          <Route path="new-order" element={"<NewOrderPage />"} />
+          <Route path="account" element={<UserAccountPage />} />
           <Route path="edit-order/:id" element={"<EditOrderPage />"} />
         </Route>
       </Routes>

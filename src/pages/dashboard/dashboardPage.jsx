@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row, Col, Card, Table } from "react-bootstrap";
+import { Container, Row, Col, Card, Table, Button } from "react-bootstrap";
 import { Line, Bar } from "react-chartjs-2";
 import {
   FaShoppingCart,
@@ -117,6 +117,9 @@ const Dashboard = () => {
     ],
   };
 
+  // Get the latest 5 orders
+  const latestOrders = orders.slice(-5).reverse(); // Slice the last 5 orders and reverse to show the most recent first
+
   return (
     <Container fluid>
       <Row className="mb-4">
@@ -206,7 +209,12 @@ const Dashboard = () => {
       <Row className="mt-4">
         <Col>
           <Card className="dashboard-card">
-            <Card.Header>Recent Orders</Card.Header>
+            <Card.Header>
+              Recent Orders
+              <Link to="/admin/orders" style={{ float: "right" }}>
+                <Button variant="primary">Show All</Button>
+              </Link>
+            </Card.Header>
             <Card.Body>
               <Table striped bordered hover>
                 <thead>
@@ -222,40 +230,50 @@ const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {orders.map((order, index) => (
-                    <tr key={order._id}>
-                      <td>{index + 1}</td>
-                      <td>{order.orderId}</td>
-                      <td>{order.userId}</td>
-                      <td>
-                        {order.products
-                          .map((p) => ` ${p.productName} (${p.quantity})`)
-                          .join(", ")}
-                      </td>
-                      <td>${order.totalPrice}</td>
-                      <td>{new Date(order.date).toLocaleDateString()}</td>
-                      <td>
-                        <span
-                          className={`badge ${
-                            order.status === "confirmed"
-                              ? "bg-primary"
-                              : order.status === "pending"
-                              ? "bg-info"
-                              : "bg-warning"
-                          }`}
-                        >
-                          {order.status}
-                        </span>
-                      </td>
-                      <td>
-                        <FaPen color="green" style={{ cursor: "pointer" }} />
-                        <FaTrash
-                          color="red"
-                          style={{ cursor: "pointer", marginLeft: 10 }}
-                        />
-                      </td>
-                    </tr>
-                  ))}
+                  {latestOrders.map((order, index) => {
+                    // Find the user matching the order's userId
+                    const user = users.find(
+                      (user) => user._id === order.userId
+                    );
+                    const customerName = user
+                      ? `${user.firstName} ${user.lastName}`
+                      : "Unknown User";
+
+                    return (
+                      <tr key={order._id}>
+                        <td>{index + 1}</td>
+                        <td>{order.orderId}</td>
+                        <td>{customerName}</td>
+                        <td>
+                          {order.products
+                            .map((p) => ` ${p.productName} (${p.quantity})`)
+                            .join(", ")}
+                        </td>
+                        <td>${order.totalPrice}</td>
+                        <td>{new Date(order.date).toLocaleDateString()}</td>
+                        <td>
+                          <span
+                            className={`badge ${
+                              order.status === "confirmed"
+                                ? "bg-primary"
+                                : order.status === "pending"
+                                ? "bg-info"
+                                : "bg-warning"
+                            }`}
+                          >
+                            {order.status}
+                          </span>
+                        </td>
+                        <td>
+                          <FaPen color="green" style={{ cursor: "pointer" }} />
+                          <FaTrash
+                            color="red"
+                            style={{ cursor: "pointer", marginLeft: 10 }}
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </Table>
             </Card.Body>

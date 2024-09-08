@@ -1,7 +1,5 @@
-// OrdersPage.jsx
 import { useState } from "react";
 import { Button, Col, Container, Form, Row, Stack } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import OrdersTable from "../../components/OrdersTable/OrdersTable";
 import CreateOrderModal from "../../components/CreateOrderModal/CreateOrderModal";
 import { useDispatch } from "react-redux";
@@ -22,10 +20,7 @@ const OrdersPage = () => {
 
   return (
     <Container>
-      <Row>
-        <Col xs={9}>
-          <Form.Control type="text" placeholder="Search by Order number..." />
-        </Col>
+      <Row className="align-items-center mb-3">
         <Col xs={3}>
           <Button
             variant="success"

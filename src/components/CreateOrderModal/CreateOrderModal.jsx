@@ -12,11 +12,7 @@ const CreateOrderModal = ({ show, handleClose, handleSave }) => {
   const today = new Date().toISOString().split("T")[0];
 
   const getNextOrderId = () => {
-    const lastOrderId = orders.reduce((max, order) => {
-      const currentId = parseInt(order.orderId.replace("ORD", ""), 10);
-      return currentId > max ? currentId : max;
-    }, 0);
-    return `ORD${(lastOrderId + 1).toString().padStart(3, "0")}`;
+    return "ORD-" + Math.random().toString(36).substr(2, 9).toUpperCase();
   };
 
   const [formData, setFormData] = useState({

@@ -19,6 +19,8 @@ import SidebarItem from "../SideBarItem/sideBarItem";
 import { getProductsAction } from "../../redux/product/productActions";
 import { getCategoriesAction } from "../../redux/category/categoryActions";
 import { getOrdersAction } from "../../redux/order/orderAction";
+import UserImage from "../../assets/UserImage.png";
+import logo from "../../assets/logo.png";
 
 const iconStyles = {
   transition: "transform 0.3s ease, color 0.3s ease",
@@ -63,14 +65,28 @@ const AdminLayout = () => {
     <Container fluid className="p-0 d-flex flex-column min-vh-100">
       {/* Sticky Navbar */}
       <Navbar
-        bg="dark"
-        variant="dark"
         expand="lg"
         className="px-4 sticky-top shadow-sm"
-        style={{ zIndex: 1050 }}
+        style={{ zIndex: 1050, backgroundColor: "#C4CAD0" }}
       >
-        <Navbar.Brand as={Link} to="/admin/">
-          Dashboard
+        <Navbar.Brand
+          as={Link}
+          to="/admin/"
+          className="d-flex align-items-center"
+        >
+          <img
+            src={logo}
+            alt="logo"
+            style={{
+              width: "60px",
+              height: "60px",
+              borderRadius: "50%",
+              marginRight: "10px",
+              transition: "transform 0.3s ease",
+            }}
+            className="logo-img"
+          />
+          <span style={{ fontSize: "1.25rem", fontWeight: "bold" }}>Admin</span>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -91,17 +107,23 @@ const AdminLayout = () => {
           style={{ zIndex: 1000 }}
         >
           <Stack className="h-100">
-            {/* User Profile Card */}
-            <Card className="text-center fw-bold mb-4">
+            <Card className="text-center fw-bold">
               <Card.Header>
-                <FaUsers size={80} />
+                <img
+                  src={UserImage}
+                  alt="User"
+                  style={{
+                    width: "150px",
+                    height: "150px",
+                    borderRadius: "50%",
+                  }}
+                />
               </Card.Header>
               <Card.Body>{firstName + " " + lastName}</Card.Body>
             </Card>
 
             {/* Menu Items */}
             <Stack className="my-4">
-              {/* SidebarItem component will render the menu items */}
               <SidebarItem
                 icon={<FaTachometerAlt style={iconStyles} />}
                 label="Dashboard"
@@ -152,7 +174,10 @@ const AdminLayout = () => {
         </Col>
 
         {/* Main Content */}
-        <Col style={{ marginLeft: "25%" }} className="flex-grow-1">
+        <Col
+          style={{ marginLeft: "25%", backgroundColor: "#CCCCCC" }}
+          className="flex-grow-1"
+        >
           <div className="pt-4">
             <Outlet />
           </div>
@@ -160,7 +185,10 @@ const AdminLayout = () => {
       </Row>
 
       {/* Footer */}
-      <footer className="bg-dark text-white text-center py-2 mt-auto">
+      <footer
+        className="text-center py-2 mt-auto"
+        style={{ backgroundColor: "#C4CAD0" }}
+      >
         <small>&copy; 2024 Anjan. All rights reserved.</small>
       </footer>
     </Container>
