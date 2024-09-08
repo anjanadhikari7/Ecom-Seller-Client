@@ -2,19 +2,40 @@ import { useState } from "react";
 import { Button, Col, Container, Form, Row, Stack } from "react-bootstrap";
 import OrdersTable from "../../components/OrdersTable/OrdersTable";
 import CreateOrderModal from "../../components/CreateOrderModal/CreateOrderModal";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createOrderAction } from "../../redux/order/orderAction";
+import { updateProductAction } from "../../redux/product/productActions";
 
 const OrdersPage = () => {
   const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
-
+  const { products } = useSelector((state) => state.product);
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
   const handleSaveOrder = (newOrder) => {
-    // Add logic to save the new order
+    // Dispatch action to create the new order
     dispatch(createOrderAction(newOrder));
+
+    // Update product quantities
+    newOrder.products.forEach((orderProduct) => {
+      // Find the product to update
+      const productToUpdate = products.find(
+        (product) => product._id === orderProduct.productId
+      );
+
+      if (productToUpdate) {
+        // Create the updated product object
+        const updatedProduct = {
+          ...productToUpdate,
+          quantity: productToUpdate.quantity - orderProduct.quantity,
+        };
+
+        // Dispatch action to update the product quantity
+        dispatch(updateProductAction(updatedProduct));
+      }
+    });
+
     console.log(newOrder);
   };
 

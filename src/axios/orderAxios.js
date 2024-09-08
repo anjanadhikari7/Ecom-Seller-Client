@@ -17,5 +17,27 @@ export const createOrders = (OrderObj) => {
     method: "post",
     url: ORDER_API_URL,
     data: OrderObj,
+    isPrivate: true,
+  });
+};
+
+// Update orders
+export const updateOrders = (UpdatedOrderObj) => {
+  return axiosApiCall({
+    method: "patch",
+    url: ORDER_API_URL,
+    data: UpdatedOrderObj,
+    isPrivate: true,
+  });
+};
+
+// Delete orders
+
+export const deleteOrder = (OrderObj) => {
+  return axiosApiCall({
+    method: "delete",
+    url: ORDER_API_URL,
+    data: OrderObj,
+    isPrivate: true,
   });
 };
