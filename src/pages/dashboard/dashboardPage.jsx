@@ -9,7 +9,7 @@ import {
   FaPen,
   FaTrash,
 } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CountUp from "react-countup";
 import { Link } from "react-router-dom";
 import "./Dashboard.css";
@@ -26,6 +26,7 @@ import {
   Tooltip,
   Filler,
 } from "chart.js";
+import { deleteOrderAction } from "../../redux/order/orderAction";
 
 ChartJS.register(
   CategoryScale,
@@ -43,6 +44,7 @@ const Dashboard = () => {
   const { orders } = useSelector((state) => state.order);
   const { categories } = useSelector((state) => state.category);
   const { products } = useSelector((state) => state.product);
+  const dispatch = useDispatch();
 
   const chartColors = {
     purple: "rgba(102, 16, 242, 0.8)",
@@ -115,6 +117,9 @@ const Dashboard = () => {
         borderWidth: 1,
       },
     ],
+  };
+  const handleDelete = (order) => {
+    dispatch(deleteOrderAction(order));
   };
 
   // Get the latest 5 orders
@@ -265,10 +270,10 @@ const Dashboard = () => {
                           </span>
                         </td>
                         <td>
-                          <FaPen color="green" style={{ cursor: "pointer" }} />
                           <FaTrash
                             color="red"
                             style={{ cursor: "pointer", marginLeft: 10 }}
+                            onClick={() => handleDelete(order)}
                           />
                         </td>
                       </tr>
