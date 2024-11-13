@@ -22,17 +22,14 @@ const LoginForm = () => {
   const { isLoading } = useSelector((state) => state.user);
 
   // Handle on Submit
-
   const handleOnSubmit = async (e) => {
     e.preventDefault();
 
     // start Loading
     dispatch(setIsLoading(true));
     // API call to login user | GET tokens
-
     const result = await loginUser(formData);
     // stop loading
-
     dispatch(setIsLoading(false));
     if (result?.status === "error") {
       return toast.error(result.message);
@@ -45,6 +42,7 @@ const LoginForm = () => {
     // once tokens are stored, dispatch action to get user
     dispatch(getUserAction());
   };
+
   // Logic to handle what should happen if a user is logged in
   const { user } = useSelector((state) => state.user);
 
@@ -97,10 +95,18 @@ const LoginForm = () => {
 
         <p className="pt-2">
           Forgot Password? <Link to="reset-password">Reset Password</Link>
-          <br />
-          New User? <Link to="/signup">Sign Up</Link>
         </p>
-        <p className="pt-2"></p>
+
+        {/* Sample login details section */}
+        <div className="pt-3">
+          <h5>Sample Login Details:</h5>
+          <p>
+            Email: <strong>anjanadhikari7@gmail.com</strong>
+          </p>
+          <p>
+            Password: <strong>aa</strong>
+          </p>
+        </div>
       </Form>
     </Container>
   );
